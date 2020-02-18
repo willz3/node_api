@@ -1,0 +1,16 @@
+{
+  "name": "api_node",
+  "version": "1.0.0",
+  "description": "The first project with node, MongoDB (NoSQL) and express for create an API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "willian.vassilek",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "express": "^4.17.1",
+    "mongoose": "^5.9.1"
+  }
+}
