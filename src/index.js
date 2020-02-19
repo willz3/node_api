@@ -9,6 +9,5 @@ app.use(bodyParser.json());
 // Using to send parameters in url
 app.use(bodyParser.urlencoded({ extended: false})); 
 
-require('./controller/authController')(app);
-require('./controller/projectController')(app);
+require('./controller/index')(app);
 app.listen(port);
