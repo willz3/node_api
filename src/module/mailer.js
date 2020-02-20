@@ -6,7 +6,7 @@ const nodeMailerHbs = require('nodemailer-express-handlebars');
 const  {host, port, user, pass} = require('../config/mail.json');
 const viewPath = resolve(__dirname, '..', 'resource', 'template', 'mail');
 
-var transport = nodemailer.createTransport({
+const transport = nodemailer.createTransport({
     host,
     port,
     auth: { user, pass }

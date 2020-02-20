@@ -3,7 +3,6 @@ const authMiddleware = require('../middleware/auth.js');
 
 const router = express.Router();
 
-
 router.use(authMiddleware);
 
 router.get('/', (req, res) => {
