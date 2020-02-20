@@ -50,13 +50,6 @@ router.post('/authenticate', async (req, res) => {
 
 });
 
-function generateToken(params = {}){
-    return jwt.sign(params, authConfig.secret, {
-        expiresIn: 86400,
-    });
-
-}
-
 router.post('/forgot_password', async (req, res) => {
     const { email } = req.body;
 
@@ -87,16 +80,46 @@ router.post('/forgot_password', async (req, res) => {
             context: { token }
         }, (error) => {
             if(error){
-                console.log(error);
                 return res.status(400).send({ error: 'The token couldn\'t be sent by email...' });
             }
                
             return res.send();
         })
     } catch (error){
-        console.log(error);
         return res.status(400).send({ error: 'Error trying to recover password, try again.' });
     }
 });
+
+router.post('/reset_password', async (req, res) => {
+    const {email, token, password} = req.body;
+
+    try {
+        const user = User.findOne({ email })
+            .select('+passwordResetToken passwordResetExpires');
+        
+        if(!user)
+            return res.status(400).send({ error: 'User not found' });
+        
+        if(token !== user.passwordResetToken)
+            return res.status(400).send({ error: 'Invalid token' });
+        
+        const dateNow = new Date();
+
+        if(dateNow > user.passwordResetExpires)
+            return res.status(400).send({ error: 'Expired Token. Please, generate a new one.' });
+        
+        user.password = password;
+
+        await user.save();
+    } catch (error) {
+        res.status(400).send({ error: "Cannot reset password. Please, try again"});
+    }
+});
+
+function generateToken(params = {}){
+    return jwt.sign(params, authConfig.secret, {
+        expiresIn: 86400,
+    });
+}
 
 module.exports = (app) => app.use('/auth', router);
